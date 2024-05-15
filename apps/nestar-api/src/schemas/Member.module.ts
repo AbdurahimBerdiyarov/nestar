@@ -98,12 +98,20 @@ const MemberSchema = new Schema(
 			default: 0,
 		},
 
-		membeBlocks: {
+		memberBlocks: {
 			type: Number,
 			default: 0,
 		},
 
 		deletedAt: {
+			type: Date,
+		},
+
+		createdAt: {
+			type: Date,
+		},
+
+		updatedAt: {
 			type: Date,
 		},
 	},
