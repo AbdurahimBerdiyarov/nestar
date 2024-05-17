@@ -8,6 +8,7 @@ import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 import { T } from './libs/types/common';
+import { response } from 'express';
 
 @Module({
 	imports: [
@@ -21,7 +22,7 @@ import { T } from './libs/types/common';
 				const GraphQLFormattedError = {
 					code: error?.extensions.code,
 					message:
-						error?.extensions?.response?.message || error?.extensions?.message || error?.message || error?.message,
+						error?.extensions?.exception?.response?.message || error?.extensions?.response?.message || error?.message,
 				};
 				console.log('GRAPHQL GLOBAL ERR:', GraphQLFormattedError);
 				return GraphQLFormattedError;
