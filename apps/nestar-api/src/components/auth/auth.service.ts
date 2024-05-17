@@ -1,28 +1,35 @@
-// import { Injectable } from '@nestjs/common';
-// import * as bcrypt from 'bcryptjs';
-
-// @Injectable()
-// export class AuthService {
-// 	public async hashpassword(memberPassword: string): Promise<string> {
-// 		const salt = await bcrypt.getSalt(10);
-// 		return await bcrypt.hash(memberPassword, salt);
-// 	}
-
-// 	public async comparePasswords(password: string, hashedpassword: string): Promise<boolean> {
-// 		return await bcrypt.compare(password, hashedpassword);
-// 	}
-// }
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
+import { T } from '../../libs/types/common';
+import { Member } from '../../libs/dto/member/member';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
+	constructor(private jwtService: JwtService) {}
 	public async hashpassword(memberPassword: string): Promise<string> {
-		const salt = await bcrypt.genSalt(); // rounds sifatida 10 berilgan
+		const salt = await bcrypt.genSalt();
 		return await bcrypt.hash(memberPassword, salt);
 	}
 
 	public async comparePasswords(password: string, hashedpassword: string): Promise<boolean> {
 		return await bcrypt.compare(password, hashedpassword);
+	}
+
+	public async creatToken(member: Member): Promise<string> {
+		console.log('member:', member);
+
+		const payload: T = {};
+		Object.keys(member['_doc'] ? member['_doc'] : member).map((ele) => {
+			payload[`${ele}`] = member[`${ele}`];
+		});
+		delete payload.memberPassword;
+
+		return await this.jwtService.signAsync(payload);
+	}
+	public async verifyToken(token: string): Promise<Member> {
+		const member = await this.jwtService.verifyAsync(token);
+
+		return member;
 	}
 }
