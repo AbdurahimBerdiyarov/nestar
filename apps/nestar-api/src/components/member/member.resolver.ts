@@ -115,6 +115,7 @@ export class MemberResolver {
 		if (!validMime) throw new Error(Message.PROVIDE_ALLOWED_FORMAT);
 
 		const imageName = getSerialForImage(filename);
+
 		const url = `uploads/${target}/${imageName}`;
 		const stream = createReadStream();
 
@@ -124,6 +125,7 @@ export class MemberResolver {
 				.on('finish', async () => resolve(true))
 				.on('error', () => reject(false));
 		});
+		console.log('result:::', result);
 		if (!result) throw new Error(Message.UPLOAD_FAILED);
 
 		return url;
