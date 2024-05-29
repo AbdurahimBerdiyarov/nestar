@@ -63,6 +63,10 @@ export class CommentResolver {
 		return await this.commentService.getComments(memberId, input);
 	}
 
+	// ******************
+	// **    ADMIN     **
+	// ******************
+
 	@Roles(MemberType.ADMIN)
 	@UseGuards(RolesGuard)
 	@Mutation((returns) => Comment)

@@ -89,7 +89,9 @@ export class MemberResolver {
 		return await this.memberService.likeTargetMember(memberId, likeRefId);
 	}
 
-	// ADMIN
+	// ******************
+	// **    ADMIN     **
+	// ******************
 
 	// Authorization: ADMIN
 	@Roles(MemberType.ADMIN)
