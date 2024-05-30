@@ -6,9 +6,11 @@ import { FollowService } from './follow.service';
 import FollowSchema from '../../schemas/Follow.model';
 import { AuthModule } from '../auth/auth.module';
 import { MemberModule } from '../member/member.module';
+// import { MemberModule } from '../member/member.module';
 
 @Module({
 	imports: [
+		MemberModule,
 		MongooseModule.forFeature([
 			{
 				name: 'Follow',
@@ -16,7 +18,7 @@ import { MemberModule } from '../member/member.module';
 			},
 		]),
 		AuthModule,
-		MemberModule,
+		// forwardRef(() => MemberModule),
 	],
 	providers: [FollowResolver, FollowService],
 	exports: [FollowService],
