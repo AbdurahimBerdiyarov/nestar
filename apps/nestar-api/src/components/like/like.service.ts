@@ -82,6 +82,6 @@ export class LikeService {
 
 		console.log('result:::', result);
 
-		return null;
+		return result;
 	}
 }
