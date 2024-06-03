@@ -5,7 +5,6 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { Follower, Followers, Following, Followings } from '../../libs/dto/follow/follow';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { ObjectId } from 'mongoose';
-import { log } from 'console';
 import { shapeIntoMongoObjectId } from '../../libs/config';
 import { WithoutGuard } from '../auth/guards/without.guard';
 import { FollowInquiry } from '../../libs/dto/follow/follow.input';
@@ -22,6 +21,7 @@ export class FollowResolver {
 		console.log(`memberId:::${memberId}`);
 
 		const followingId = shapeIntoMongoObjectId(input);
+		console.log('Johon::', followingId);
 		return await this.followService.subscribe(memberId, followingId);
 	}
 
@@ -31,6 +31,7 @@ export class FollowResolver {
 		console.log('Mutation: unsubscribe');
 		console.log(`Meridani input::::${input}`);
 		const followingId = shapeIntoMongoObjectId(input);
+
 		return await this.followService.unsubscribe(memberId, followingId);
 	}
 
