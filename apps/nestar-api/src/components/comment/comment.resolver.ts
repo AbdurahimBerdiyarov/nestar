@@ -56,9 +56,11 @@ export class CommentResolver {
 	@Query((returns) => Comments)
 	public async getComments(
 		@Args('input') input: CommentsInquiry,
+
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Comments> {
 		console.log('Query: getComments');
+		console.log('INPUT:::', input);
 		input.search.commentRefId = shapeIntoMongoObjectId(input.search.commentRefId);
 		return await this.commentService.getComments(memberId, input);
 	}

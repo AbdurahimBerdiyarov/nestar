@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 import { MemberService } from '../member/member.service';
 import { PropertyService } from '../property/property.service';
 import { BoardArticle } from '../../libs/dto/board-article/board-article';
@@ -80,37 +81,57 @@ export class CommentService {
 
 		return result;
 	}
-
 	// public async getComments(memberId: ObjectId, input: CommentsInquiry): Promise<Comments> {
 	// 	const { commentRefId } = input.search;
-	// 	const match: T = { commentRefId: commentRefId, CommentStatus: CommentStatus.ACTIVE };
-	// 	const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
+	// 	// const match = { commentRefId: new ObjectId(commentRefId) };
 
-	// 	const result: Comments[] = await this.commentModel.aggregate([
-	// 		{ $match: match },
-	// 		{ $sort: sort },
-	// 		{
-	// 			$facet: {
-	// 				list: [
-	// 					{ $skip: (input.page - 1) * input.limit },
-	// 					{ $limit: input.limit },
+	// 	const match = { commentRefId: commentRefId };
+	// 	const sort: Record<string, 1 | -1> = { [input?.sort ?? 'createdAt']: input?.direction === -1 ? -1 : 1 };
 
-	// 					lookupMember,
-	// 					{ $unwind: '$memberData' },
-	// 				],
-	// 				metaCounter: [{ $count: 'total' }],
+	// 	console.log('match:::', match);
+	// 	console.log('sort:::', sort);
+	// 	console.log('commentRefId:::', commentRefId);
+
+	// 	try {
+	// 		const result = await this.commentModel.aggregate([
+	// 			{ $match: match },
+	// 			{ $sort: sort },
+	// 			{
+	// 				$facet: {
+	// 					list: [
+	// 						{ $skip: (input.page - 1) * input.limit },
+	// 						{ $limit: input.limit },
+	// 						lookupMember,
+	// 						{ $unwind: '$memberData' },
+	// 					],
+	// 					metaCounter: [{ $count: 'total' }],
+	// 				},
 	// 			},
-	// 		},
-	// 	]);
-	// 	if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+	// 		]);
 
-	// 	return result[0];
+	// 		console.log('Aggregation result:::', result);
+
+	// 		if (!result.length || !result[0].list.length) {
+	// 			throw new InternalServerErrorException('No data found');
+	// 		}
+
+	// 		return {
+	// 			list: result[0].list,
+	// 			metaCounter: result[0].metaCounter.length ? result[0].metaCounter[0].total : 0,
+	// 		};
+	// 	} catch (error) {
+	// 		console.error('Error fetching comments:', error);
+	// 		throw new InternalServerErrorException('Error fetching comments');
+	// 	}
 	// }
 
 	public async getComments(memberId: ObjectId, input: CommentsInquiry): Promise<Comments> {
-		let { commentRefId } = input.search;
-		const match: T = { commentRefId: commentRefId, CommentStatus: CommentStatus.ACTIVE };
+		const { commentRefId } = input.search;
+		const match: T = { commentRefId: commentRefId, commentStatus: CommentStatus.ACTIVE };
 		const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
+		console.log('match:::', match);
+		console.log('sort:::', sort);
+		console.log('commentRefId:::', commentRefId);
 
 		const result: Comments[] = await this.commentModel.aggregate([
 			{ $match: match },
@@ -124,6 +145,7 @@ export class CommentService {
 						lookupMember,
 						{ $unwind: '$memberData' },
 					],
+
 					metaCounter: [{ $count: 'total' }],
 				},
 			},
