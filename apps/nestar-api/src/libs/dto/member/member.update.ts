@@ -24,7 +24,7 @@ export class MemberUpdate {
 	@IsOptional()
 	@Length(3, 12)
 	@Field(() => String, { nullable: true })
-	memberNIck?: string;
+	memberNick?: string;
 
 	@IsOptional()
 	@Length(5, 12)
