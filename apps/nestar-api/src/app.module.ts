@@ -20,6 +20,8 @@ import { SocketModule } from './socket/socket.module';
 			uploads: false,
 			autoSchemaFile: true,
 			formatError: (error: T) => {
+				console.log('ERROR::L::', error);
+
 				const GraphQLFormattedError = {
 					code: error?.extensions.code,
 					message:

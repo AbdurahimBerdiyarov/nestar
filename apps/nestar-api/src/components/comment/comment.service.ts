@@ -65,17 +65,19 @@ export class CommentService {
 	public async updateComment(memberId: ObjectId, input: CommentUpdate): Promise<Comment> {
 		const { _id } = input;
 
-		const result = await this.commentModel.findOneAndUpdate(
-			{
-				_id: _id,
-				memberId: memberId,
-				commentStatus: CommentStatus.ACTIVE,
-			},
-			input,
-			{
-				new: true,
-			},
-		);
+		const result = await this.commentModel
+			.findOneAndUpdate(
+				{
+					_id: _id,
+					memberId: memberId,
+					commentStatus: CommentStatus.ACTIVE,
+				},
+				input,
+				{
+					new: true,
+				},
+			)
+			.exec();
 
 		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
 
@@ -133,23 +135,25 @@ export class CommentService {
 		console.log('sort:::', sort);
 		console.log('commentRefId:::', commentRefId);
 
-		const result: Comments[] = await this.commentModel.aggregate([
-			{ $match: match },
-			{ $sort: sort },
-			{
-				$facet: {
-					list: [
-						{ $skip: (input.page - 1) * input.limit },
-						{ $limit: input.limit },
-						// meLiked
-						lookupMember,
-						{ $unwind: '$memberData' },
-					],
+		const result: Comments[] = await this.commentModel
+			.aggregate([
+				{ $match: match },
+				{ $sort: sort },
+				{
+					$facet: {
+						list: [
+							{ $skip: (input.page - 1) * input.limit },
+							{ $limit: input.limit },
+							// meLiked
+							lookupMember,
+							{ $unwind: '$memberData' },
+						],
 
-					metaCounter: [{ $count: 'total' }],
+						metaCounter: [{ $count: 'total' }],
+					},
 				},
-			},
-		]);
+			])
+			.exec();
 
 		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
@@ -157,7 +161,7 @@ export class CommentService {
 	}
 
 	public async removeCommentByAdmin(input: ObjectId): Promise<Comment> {
-		const result = await this.commentModel.findByIdAndDelete(input);
+		const result = await this.commentModel.findByIdAndDelete(input).exec();
 		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
 		return result;
 	}
