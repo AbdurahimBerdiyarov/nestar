@@ -39,16 +39,17 @@ export class SocketGateway implements OnGatewayInit {
 	handleDisconnect(client: WebSocket) {
 		this.summaryClient--;
 		this.logger.verbose(`Disconnection & total: [${this.summaryClient}]`);
+
 		const infoMsg: InfoPayload = {
 			event: 'info',
 			totalClients: this.summaryClient,
 		};
-		//client - disconnect
+
 		this.broadcastMessage(client, infoMsg);
 	}
 
 	@SubscribeMessage('message')
-	public async handleMessage(client: WebSocket, payload: any): Promise<void> {
+	public async handleMessage(client: WebSocket, payload: string): Promise<void> {
 		const newMessage: MessagePayload = { event: 'message', text: payload };
 
 		this.logger.verbose(`NEW MESSAGE: ${payload}`);
