@@ -206,19 +206,29 @@ export class BoardArticleService {
 
 	public async removeBoardArticleByAdmin(articleId: ObjectId): Promise<BoardArticle> {
 		const search: T = { _id: articleId, articleStatus: BoardArticleStatus.DELETE };
+
+		// console.log(search, 'search');
+		// if (search.articleStatus) {
+		// 	delete search.articleStatus;
+		// }
+
 		const result = await this.boardArticleModel.findOneAndDelete(search).exec();
+		console.log(result, 'result');
+
 		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
 		return result;
 	}
 
 	public async boardArticlesStatusEditor(input: StatisticModifier): Promise<BoardArticle> {
 		const { _id, targetKey, modifier } = input;
-		return await this.boardArticleModel.findByIdAndUpdate(
-			_id,
-			{ $inc: { [targetKey]: modifier } },
-			{
-				new: true,
-			},
-		);
+		return await this.boardArticleModel
+			.findByIdAndUpdate(
+				_id,
+				{ $inc: { [targetKey]: modifier } },
+				{
+					new: true,
+				},
+			)
+			.exec();
 	}
 }

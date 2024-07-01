@@ -92,7 +92,7 @@ export class BoardArticleResolver {
 
 	@Roles(MemberType.ADMIN)
 	@UseGuards(RolesGuard)
-	@Query((returns) => BoardArticle)
+	@Mutation((returns) => BoardArticle)
 	public async updateBoardArticlesByAdmin(
 		@Args('input') input: BoardArticleUpdate,
 		@AuthMember('_id') memberId: ObjectId,
