@@ -25,7 +25,7 @@ export class SocketGateway implements OnGatewayInit {
 	private logger: Logger = new Logger('SocketEventsGateway');
 	private summaryClient: number = 0;
 	private clientsAuthMap = new Map<WebSocket, Member>();
-	private messageList: MessagePayload[] = [];
+	private messagesList: MessagePayload[] = [];
 
 	constructor(private authService: AuthService) {}
 
@@ -63,7 +63,7 @@ export class SocketGateway implements OnGatewayInit {
 			action: 'joined',
 		};
 		this.emitMessage(infoMsg);
-		client.send(JSON.stringify({ event: 'getMessage', list: this.messageList }));
+		client.send(JSON.stringify({ event: 'getMessages', list: this.messagesList }));
 	}
 
 	public handleDisconnect(client: WebSocket) {
@@ -91,8 +91,8 @@ export class SocketGateway implements OnGatewayInit {
 		const clientNick: string = authMember?.memberNick ?? 'Cuest';
 		this.logger.verbose(`NEW MESSAGE: [${clientNick}]: ${payload}`);
 
-		this.messageList.push(newMessage);
-		if (this.messageList.length > 5) this.messageList.splice(0, this.messageList.length - 5);
+		this.messagesList.push(newMessage);
+		// if (this.messagesList.length > 5) this.messagesList.splice(0, this.messagesList.length - 5);
 
 		this.emitMessage(newMessage);
 	}
