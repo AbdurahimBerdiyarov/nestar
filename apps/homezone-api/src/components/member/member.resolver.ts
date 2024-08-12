@@ -152,7 +152,8 @@ export class MemberResolver {
 			stream
 				.pipe(createWriteStream(url))
 				.on('finish', async () => resolve(true))
-				.on('error', () => reject(false));
+				.on('error', () => reject(new Error(Message.UPLOAD_FAILED)));
+			// .on('error', () => reject(false));
 		});
 		console.log('result:::', result);
 		if (!result) throw new Error(Message.UPLOAD_FAILED);

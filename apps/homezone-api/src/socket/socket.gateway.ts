@@ -92,7 +92,7 @@ export class SocketGateway implements OnGatewayInit {
 		this.logger.verbose(`NEW MESSAGE: [${clientNick}]: ${payload}`);
 
 		this.messagesList.push(newMessage);
-		// if (this.messagesList.length > 5) this.messagesList.splice(0, this.messagesList.length - 5);
+		if (this.messagesList.length > 5) this.messagesList.splice(0, this.messagesList.length - 5);
 
 		this.emitMessage(newMessage);
 	}
