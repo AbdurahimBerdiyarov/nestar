@@ -9,22 +9,28 @@ import { OrdinaryInquiry } from '../../libs/dto/property/property.input';
 import { Properties } from '../../libs/dto/property/property';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { lookupFavorite } from '../../libs/config';
-import { read } from 'fs';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class LikeService {
-	constructor(@InjectModel('Like') private readonly likeModel: Model<Like>) {}
+	constructor(
+		@InjectModel('Like') private readonly likeModel: Model<Like>,
+		private notificationService: NotificationService,
+	) {}
 
 	public async toggleLike(input: LikeInput): Promise<number> {
+		const { likeGroup, likeRefId, memberId } = input;
 		const search: T = { memberId: input.memberId, likeRefId: input.likeRefId },
 			exist = await this.likeModel.findOne(search).exec();
 		let modifier = 1;
 		if (exist) {
 			await this.likeModel.findOneAndDelete(search).exec();
 			modifier = -1;
+			await this.notificationService.createNotificationForLike(likeGroup, likeRefId, memberId);
 		} else {
 			try {
 				await this.likeModel.create(input);
+				await this.notificationService.createNotificationForLike(likeGroup, likeRefId, memberId);
 			} catch (err) {
 				console.log('Error Service.model:', err.message);
 				throw new BadRequestException(Message.CREATE_FAILED);
@@ -43,7 +49,7 @@ export class LikeService {
 	public async getFavoriteProperties(memberId: ObjectId, input: OrdinaryInquiry): Promise<Properties> {
 		const { page, limit } = input;
 		const match: T = { likeGroup: LikeGroup.PROPERTY, memberId: memberId };
-		console.log('matchchchchchch:', match);
+		console.log('match:', match);
 
 		const data: T = await this.likeModel
 			.aggregate([

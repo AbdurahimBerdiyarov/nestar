@@ -5,6 +5,7 @@ export enum NoticeCategory {
 	TERMS = 'TERMS',
 	INQUIRY = 'INQUIRY',
 }
+
 registerEnumType(NoticeCategory, {
 	name: 'NoticeCategory',
 });
@@ -14,6 +15,7 @@ export enum NoticeStatus {
 	ACTIVE = 'ACTIVE',
 	DELETE = 'DELETE',
 }
+
 registerEnumType(NoticeStatus, {
 	name: 'NoticeStatus',
 });

@@ -14,6 +14,7 @@ import { throwError } from 'rxjs';
 import { CommentUpdate } from '../../libs/dto/comment/comment.update';
 import { T } from '../../libs/types/common';
 import { lookupMember } from '../../libs/config';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class CommentService {
@@ -22,6 +23,7 @@ export class CommentService {
 		private readonly memberService: MemberService,
 		private readonly propertyService: PropertyService,
 		private readonly boardArticleService: BoardArticleService,
+		private readonly notificationService: NotificationService,
 	) {}
 
 	public async createComment(memberId: ObjectId, input: CommentInput): Promise<Comment> {
@@ -59,6 +61,14 @@ export class CommentService {
 				break;
 		}
 		if (!result) throw new InternalServerErrorException(Message.CREATE_FAILED);
+
+		await this.notificationService.createNotificationForComment(
+			input.commentGroup,
+			input.commentRefId,
+			memberId,
+			input.commentContent,
+		);
+
 		return result;
 	}
 
