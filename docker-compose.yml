@@ -1,5 +1,3 @@
-version: '3.3'
-
 services:
   homezone-api:
     container_name: homezone-api
@@ -35,3 +33,52 @@ networks:
 # homezone-batch: localhost:4002 => container:3008
 # FOR PRODUCTION
 
+# version: '3.3'
+
+# services:
+#   homezone-next:
+#     container_name: homezone-next
+#         build: .
+#     restart: always
+#     image: node:20.16.0
+#     ports:
+#       - 4000:3000
+#     environment:
+#       - PORT=3000
+
+#     volumes:
+#       - ./:/usr/src/homezone-next
+#     working_dir: /usr/src/homezone-next
+
+#     networks:
+#       - client-network
+
+#     command: bash -c "pnpm install && pnpm run build && pnpm run start"
+
+# networks:
+#   client-network:
+#     driver: bridge
+
+# /...........................
+# version: '3.3'
+
+# services:
+#   homezone-next:
+#     container_name: homezone-next
+#     build: .
+#     restart: always
+#     image: node:20.16.0
+#     ports:
+#       - '4000:3000'
+#     environment:
+#       - PORT=3000
+#     volumes:
+#       - ./:/usr/src/homezone-next
+#     working_dir: /usr/src/homezone-next
+#     networks:
+#       - client-network
+#     command: bash -c "yarn && yarn run dev"
+
+# networks:
+#   client-network:
+#     driver: bridge
