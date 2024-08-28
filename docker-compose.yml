@@ -10,7 +10,7 @@ services:
     working_dir: /usr/src/homezone
     networks:
       - monorepo_network
-    command: bash -c "npm install && npm run build && npm run start:prod"
+    command: bash -c "rm -rf dist && npm install && npm run build && npm run start:prod"
 
   homezone-batch:
     container_name: homezone-batch
