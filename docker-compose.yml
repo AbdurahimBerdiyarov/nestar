@@ -13,8 +13,15 @@ services:
       - NODE_ENV=production
     networks:
       - monorepo_network
+      - web
     depends_on:
       - homezone-batch
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.homezone-api.rule=Host(`api.uomostore.shop`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.homezone-api.entrypoints=websecure'
+      - 'traefik.http.routers.homezone-api.tls.certresolver=cloudflare'
+      - 'traefik.http.services.homezone-api.loadbalancer.server.port=3007'
     command: ['pnpm', 'run', 'start:prod']
 
   homezone-batch:
@@ -29,8 +36,17 @@ services:
       - NODE_ENV=production
     networks:
       - monorepo_network
+      - web
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.homezone-batch.rule=Host(`api.uomostore.shop`) && PathPrefix(`/batch`)'
+      - 'traefik.http.routers.homezone-batch.entrypoints=websecure'
+      - 'traefik.http.routers.homezone-batch.tls.certresolver=cloudflare'
+      - 'traefik.http.services.homezone-batch.loadbalancer.server.port=3008'
     command: ['pnpm', 'run', 'start:prod:batch']
 
 networks:
   monorepo_network:
     driver: bridge
+  web:
+    external: true
