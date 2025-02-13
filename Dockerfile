@@ -14,7 +14,7 @@ COPY package.json pnpm-lock.yaml /app/
 RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
 # Copy the entire project after dependencies to leverage caching
-COPY . /app/
+COPY . .
 
 # Build the project
 RUN pnpm run build
