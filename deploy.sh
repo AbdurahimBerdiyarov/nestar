@@ -1,8 +1,4 @@
-#!/bin/bash
 
-#PRODUCTION
-git reset --hard
-git checkout master
-git pull origin master
+git pull 
 
-docker compose up -d
+docker-compose up -d --build
