@@ -3,10 +3,8 @@ FROM node:20.10.0-alpine AS base
 
 # Install dependencies and pnpm globally
 RUN apk add --no-cache bash curl && \
-    curl -fsSL https://get.pnpm.io/install.sh | bash && \
-    export PNPM_HOME="/root/.local/share/pnpm" && \
-    export PATH="$PNPM_HOME:$PATH" && \
-    pnpm config set store-dir /pnpm-store
+    curl -fsSL https://get.pnpm.io/install.sh | bash -s -- --yes && \
+    ln -s /root/.local/share/pnpm/pnpm /usr/local/bin/pnpm
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -20,16 +18,16 @@ WORKDIR /usr/src/homezone
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies using pnpm
-RUN pnpm install --frozen-lockfile
+RUN /usr/local/bin/pnpm install --frozen-lockfile
 
 # Copy the entire project
 COPY . .
 
 # Build the NestJS project
-RUN pnpm run build
+RUN /usr/local/bin/pnpm run build
 
 # Expose necessary ports
 EXPOSE 3007 3008
 
 # Default command (will be overridden by docker-compose.yml)
-CMD ["pnpm", "run", "start:prod"]
+CMD ["/usr/local/bin/pnpm", "run", "start:prod"]
