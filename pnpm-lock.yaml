@@ -53,6 +53,9 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
+      bson:
+        specifier: ^6.10.2
+        version: 6.10.2
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -62,6 +65,9 @@ importers:
       commander:
         specifier: ^12.1.0
         version: 12.1.0
+      express:
+        specifier: ^4.21.2
+        version: 4.21.2
       graphql:
         specifier: ^16.8.1
         version: 16.10.0
