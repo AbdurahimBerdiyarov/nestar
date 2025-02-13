@@ -18,6 +18,10 @@ COPY . .
 
 # Build the project
 RUN pnpm run build
+RUN pnpm run build homezone-batch
+
+# Verify the `dist/` directory exists
+RUN ls -lah /app/dist/apps/homezone-batch
 
 # Expose necessary ports (adjust based on your app's needs)
 EXPOSE 3007 3008
