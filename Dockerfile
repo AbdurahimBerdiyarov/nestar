@@ -1,33 +1,26 @@
 # Use a lightweight Node.js image
-FROM node:20.10.0-alpine AS base
-
-# Install dependencies and pnpm globally
-RUN apk add --no-cache bash curl && \
-    curl -fsSL https://get.pnpm.io/install.sh | bash -s -- --yes && \
-    ln -s /root/.local/share/pnpm/pnpm /usr/local/bin/pnpm
-
-# Set environment variables
-ENV NODE_ENV=production
-ENV PNPM_HOME="/root/.local/share/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+FROM node:20.17.0-alpine
 
 # Set working directory
-WORKDIR /usr/src/homezone
+WORKDIR /app
 
-# Copy package.json and pnpm-lock.yaml (if exists) first for efficient caching
-COPY package.json pnpm-lock.yaml ./
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy package.json, pnpm-lock.yaml, and .npmrc for dependency installation
+COPY package.json pnpm-lock.yaml 
 
 # Install dependencies using pnpm
-RUN /usr/local/bin/pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
-# Copy the entire project
+# Copy the entire project after dependencies to leverage caching
 COPY . .
 
-# Build the NestJS project
-RUN /usr/local/bin/pnpm run build
+# Build the project
+RUN pnpm run build
 
-# Expose necessary ports
+# Expose necessary ports (adjust based on your app's needs)
 EXPOSE 3007 3008
 
-# Default command (will be overridden by docker-compose.yml)
-CMD ["/usr/local/bin/pnpm", "run", "start:prod"]
+# Set the default command to start the application
+CMD ["pnpm", "run", "start:prod"]

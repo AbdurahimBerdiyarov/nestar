@@ -13,6 +13,8 @@ services:
       - NODE_ENV=production
     networks:
       - monorepo_network
+    depends_on:
+      - homezone-batch
     command: ['pnpm', 'run', 'start:prod']
 
   homezone-batch:
