@@ -42,6 +42,7 @@
 		"commander": "^12.1.0",
 		"graphql": "^16.8.1",
 		"graphql-upload": "^13.0.0",
+		"iconv-lite": "^0.6.3",
 		"moment": "^2.29.4",
 		"mongoose": "^8.5.1",
 		"reflect-metadata": "^0.1.13",
