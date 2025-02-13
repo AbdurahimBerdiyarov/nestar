@@ -8,13 +8,13 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 # Copy package.json, pnpm-lock.yaml, and .npmrc for dependency installation
-COPY package.json pnpm-lock.yaml 
+COPY package.json pnpm-lock.yaml /app/
 
 # Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile --strict-peer-dependencies
 
 # Copy the entire project after dependencies to leverage caching
-COPY . .
+COPY . /app/
 
 # Build the project
 RUN pnpm run build
