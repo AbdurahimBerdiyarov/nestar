@@ -36,13 +36,6 @@ services:
       - NODE_ENV=production
     networks:
       - monorepo_network
-      - web
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.homezone-batch.rule=Host(`api.uomostore.shop`) && PathPrefix(`/batch`)'
-      - 'traefik.http.routers.homezone-batch.entrypoints=websecure'
-      - 'traefik.http.routers.homezone-batch.tls.certresolver=cloudflare'
-      - 'traefik.http.services.homezone-batch.loadbalancer.server.port=3008'
     command: ['pnpm', 'run', 'start:prod:batch']
 
 networks:
