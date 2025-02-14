@@ -23,6 +23,6 @@ async function bootstrap() {
 	console.log('process.env.PORT_API:', process.env.PORT_API);
 
 	app.useWebSocketAdapter(new WsAdapter(app));
-	await app.listen(process.env.PORT_API ?? 4000);
+	await app.listen(process.env.PORT_API ?? 4000, '0.0.0.0');
 }
 bootstrap();
