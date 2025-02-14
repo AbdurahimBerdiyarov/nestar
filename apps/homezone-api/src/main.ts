@@ -10,10 +10,12 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	app.useGlobalPipes(new ValidationPipe());
 	app.useGlobalInterceptors(new LoggingInterceptor());
-	app.enableCors({ origin: ['https://api.uomostore.shop', 'https://home.uomostore.shop'], credentials: true });
+	// app.enableCors({ origin: ['https://api.uomostore.shop', 'https://home.uomostore.shop'], credentials: true });
+	app.enableCors({ origin: true, credentials: true });
 
 	app.use(graphqlUploadExpress({ maxFileSize: 15000000, maxFiles: 10 }));
 	app.use('/uploads', express.static('./uploads'));
+	console.log('process.env.PORT_API:', process.env.PORT_API);
 
 	app.useWebSocketAdapter(new WsAdapter(app));
 	await app.listen(process.env.PORT_API ?? 4000);
