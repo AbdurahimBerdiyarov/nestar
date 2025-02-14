@@ -8,6 +8,11 @@ import { WsAdapter } from '@nestjs/platform-ws';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+
+	const expressApp = app.getHttpAdapter().getInstance();
+
+	expressApp.set('trust proxy', 1);
+
 	app.useGlobalPipes(new ValidationPipe());
 	app.useGlobalInterceptors(new LoggingInterceptor());
 	// app.enableCors({ origin: ['https://api.uomostore.shop', 'https://home.uomostore.shop'], credentials: true });
