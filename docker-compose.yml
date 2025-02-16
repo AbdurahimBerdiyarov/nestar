@@ -18,7 +18,7 @@ services:
       - homezone-batch
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.homezone-api.rule=Host(`admin.uomostore.shop`)'
+      - 'traefik.http.routers.homezone-api.rule=Host(`api.uomostore.shop`)'
       - 'traefik.http.routers.homezone-api.entrypoints=websecure'
       - 'traefik.http.routers.homezone-api.tls.certresolver=cloudflare'
       - 'traefik.http.services.homezone-api.loadbalancer.server.port=3007'
